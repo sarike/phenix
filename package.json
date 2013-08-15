@@ -1,0 +1,23 @@
+{
+  "family": "sarike",
+  "name": "phenix",
+  "version": "0.0.1",
+  "description": "a cool js app based on seajs",
+  "homepage": "https://github.com/Administrator/phenix",
+  "author": "",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/Administrator/phenix.git"
+  },
+  "bugs": {
+    "url": ""
+  },
+  "keywords": ["widget"],
+  "licenses": "MIT",
+  "spm": {
+    "output": ["phenix.js"],
+    "alias": {},
+    "devAlias": {},
+    "engines": {}
+  }
+}
