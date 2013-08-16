@@ -7,42 +7,46 @@ define(function(require, exports, module) {
 
     var BlazeModel = B.Model.extend({
         initialize: function(){
-            this.position = new Position(0, 0);
+            this.position = new Position($(window).width()/2, $(window).height()/2);
         }
     });
 
 	var Blaze = B.View.extend({
 		template: _.template(blazeTemplate),
 
+        initialize: function(){
+            this.position = this.model.position;
+        },
+
 		render: function(){
 			this.$el.html(this.template(this.model));
             return this;
 		},
 
-        runTo: function(position){
-            var cur_x = this.model.position.x;
-            var cur_y = this.model.position.y;
-            var step_x = 1,
-                step_y = 1;
-            var delta_x = position.x - cur_x;
-            var delta_y = position.y - cur_y;
-            step_x = step_y * (delta_x/delta_y);
-            console.info(delta_x+":"+delta_y);
-            var timer = window.setInterval($.proxy(function(){
-                var new_pos = new Position(this.model.position.x, this.model.position.y);
-                if(delta_x > 0)
-                    new_pos.x += step_x;
-                else
-                    new_pos.x -= step_x;
-                if(delta_y > 0)
-                    new_pos.y += step_y;
-                else
-                    new_pos.y -= step_y;
-                console.info(new_pos);
-                this.model.position = new_pos;
-                this.$el.offset({ top: this.model.position.y, left: this.model.position.x });
-            }, this), 5);
-            setTimeout(function(){window.clearInterval(timer);},2000);
+        move: function(direction_x, direction_y, time){
+            var timer = setInterval($.proxy(function move(){
+                this.position.x += direction_x;
+                this.position.y += direction_y;
+                if(this.position.touchXBorder()){
+                    direction_x = -direction_x;
+                }
+                if(this.position.touchYBorder()){
+                    direction_y = -direction_y;
+                }
+                this.$el.offset({ top: this.position.y, left: this.position.x });
+            },this), 9);
+            setTimeout(function(){clearInterval(timer)}, time)
+        },
+
+        dance: function(){
+            var cur_x = this.position.x;
+            var cur_y = this.position.y;
+            var delta_x = Util.random(0, $(window).width()) - cur_x;
+            var delta_y = Util.random(0, $(window).height()) - cur_y;
+            var direction_x = delta_x/Math.abs(delta_x) * Math.random();
+            var direction_y = delta_y/Math.abs(delta_y) * Math.random();
+            this.move(direction_x, direction_y, 3000);
+            setTimeout($.proxy(this.dance, this), 1000);
         }
 	});
 
@@ -73,6 +77,26 @@ define(function(require, exports, module) {
         var randomX = Util.random(minX, maxX);
         var randomY = Util.random(minY, maxY);
         return new Position(randomX, randomY)
+    };
+
+    Position.prototype.setPos = function(x, y){
+        this.x = x;
+        this.y = y;
+    };
+
+    Position.prototype.touchXBorder = function(){
+        return this.x < 0 || this.x > $(window).width()
+    }
+
+    Position.prototype.touchYBorder = function(){
+        return this.y < 0 || this.y > $(window).height()
+    }
+
+    var Scope = function(x1, y1, x2, y2){
+        this.x1 = x1;
+        this.x2 = x2;
+        this.y1 = y1;
+        this.y2 = y2;
     };
 
 
@@ -111,12 +135,11 @@ define(function(require, exports, module) {
             }
         },
 
-        dance: function(){
-            _.each(this.blazes, $.proxy(function(blaze){
+        run: function(){
+            _.each(this.blazes, function(blaze){
                 $('body').append(blaze.render().el);
-                var random_pos = Position.randomPosition(0, $(window).width(), 0, $(window).height());
-                blaze.runTo(random_pos)
-            }, this))
+                blaze.dance();
+            })
         }
 	};
 });

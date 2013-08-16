@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Phinex</title>
+	<link rel="stylesheet" type="text/css" href="../static/css/phinex.css"/>
+</head>
+<body>
+</body>
+</html>
+<script type="text/javascript" src="/static/js/sea-modules/seajs/seajs/2.1.1/sea.js"></script>
+<script type="text/javascript" src="/static/js/seajs-config.js"></script>
+<script type="text/javascript">
+    seajs.use((seajs.production? "sarike/phenix/0.0.1/" : "/static/js/phenix/src/") + "phenix", function(phenix){
+        phenix.Phenix.retrieveData();
+        phenix.Phenix.run();
+    });
+</script>
