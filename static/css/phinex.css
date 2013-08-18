@@ -6,3 +6,10 @@
     text-align: center;
     background: #DDDDDD;
 }
+
+.stage{
+    width: 800px;
+    height: 800px;
+    margin: 20px auto;
+    border: 1px solid;
+}

@@ -1,3 +1,1 @@
-<div class="blaze">
-	<%=title%>
-</div>
+<%=title%>
