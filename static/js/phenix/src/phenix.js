@@ -16,6 +16,19 @@ define(function(require, exports, module) {
 		template: _.template(blazeTemplate),
         className: 'blaze',
 
+        events: {
+            'mouseover': 'onMouseOver',
+            'mouseleave': 'onMouseLeave'
+        },
+
+        onMouseOver: function(){
+            this.stopDance();
+        },
+
+        onMouseLeave: function(){
+            this.dance();
+        },
+
         initialize: function(){
             this.position = this.model.get('position');
             this.stage = this.position.stage;
@@ -33,7 +46,7 @@ define(function(require, exports, module) {
          * @param duration
          */
         move: function(direction_x, direction_y, duration){
-            var timer = setInterval($.proxy(function move(){
+            this.moveInterval = setInterval($.proxy(function move(){
                 this.position.x += direction_x;
                 this.position.y += direction_y;
                 if(this.position.touchXBorder(this.$el.width())){
@@ -44,7 +57,11 @@ define(function(require, exports, module) {
                 }
                 this.$el.offset({ top: this.position.y, left: this.position.x });
             },this), 9);
-            setTimeout(function(){clearInterval(timer)}, duration)
+
+            this.moveTimeout = setTimeout($.proxy(function(){
+                if(this.moveInterval)
+                    clearInterval(this.moveInterval);
+            }, this), duration)
         },
 
         dance: function(){
@@ -55,8 +72,20 @@ define(function(require, exports, module) {
                 delta_y = random_pos.y - cur_y,
                 direction_x = delta_x/Math.abs(delta_x) * Math.random(),
                 direction_y = delta_y/Math.abs(delta_y) * Math.random();
-            this.move(direction_x, direction_y, 3000);
-            setTimeout($.proxy(this.dance, this), 3000);
+                this.move(direction_x, direction_y, 3000);
+                this.danceTimeer = setTimeout($.proxy(this.dance, this), 3000);
+        },
+
+        stopDance: function(){
+            if(this.danceTimeer){
+                clearTimeout(this.danceTimeer);
+            }
+            if(this.moveInterval){
+                clearInterval(this.moveInterval);
+            }
+            if(this.moveTimeout){
+                clearInterval(this.moveTimeout);
+            }
         }
 	});
 
@@ -98,15 +127,18 @@ define(function(require, exports, module) {
         this.x2 = x2;
         this.y1 = y1;
         this.y2 = y2;
+        this.z1 = x1;
+        this.z2 = x2;
     };
 
     Stage.stageWithEl = function(selector){
-        var stageBlock = $(selector);
-        var position = stageBlock.offset();
-        var x1 = position.left;
-        var y1 = position.top;
-        var x2 = x1 + stageBlock.width();
-        var y2 = y1 + stageBlock.height();
+        var stageBlock = $(selector),
+            offset = stageBlock.offset(),
+            x1 = offset.left,
+            y1 = offset.top,
+            x2 = x1 + stageBlock.width(),
+            y2 = y1 + stageBlock.height();
+
         return new Stage(x1, y1, x2, y2)
     };
 
@@ -158,7 +190,7 @@ define(function(require, exports, module) {
 //            var stage = new Stage(20, 20, 800, 800);
             var stage = Stage.stageWithEl('.stage');
 
-            for(var i = 0;i<20;i++){
+            for(var i = 0;i<10;i++){
                 var model = new BlazeModel({
                     position: stage.randomPosition(150, 20)
                 });
