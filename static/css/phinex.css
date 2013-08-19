@@ -1,13 +1,27 @@
 .blaze{
     cursor: pointer;
-	height: 20px;
+	/*height: 20px;*/
 	border: 1px solid;
-	line-height: 20px;
-    width: 150px;
+    border-radius: 5px;
+	/*line-height: 20px;*/
+    /*width: 150px;*/
     text-align: center;
+    display: block;
     background: #DDDDDD;
+    opacity: 0.7;
 }
-
+body{
+    background-image: url("http://img2.fengniao.com/product/112/130/ceeUf6LGX96o.jpg");
+    position: fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+.blaze-image{
+    width: 90px;
+    height: 120px;
+}
 .stage{
     width: 800px;
     height: 800px;

@@ -15,6 +15,7 @@ define(function(require, exports, module) {
 	var Blaze = B.View.extend({
 		template: _.template(blazeTemplate),
         className: 'blaze',
+        tagName: 'span',
 
         events: {
             'mouseover': 'onMouseOver',
@@ -50,10 +51,16 @@ define(function(require, exports, module) {
                 this.position.x += direction_x;
                 this.position.y += direction_y;
                 if(this.position.touchXBorder(this.$el.width())){
-                    direction_x = -direction_x;
+                    if(this.position.x <= this.position.stage.x1)
+                        direction_x = Math.abs(direction_x);
+                    else
+                        direction_x = Math.abs(direction_x) * (-1);
                 }
                 if(this.position.touchYBorder(this.$el.height())){
-                    direction_y = -direction_y;
+                    if(this.position.y <= this.position.stage.y1)
+                        direction_y = Math.abs(direction_y);
+                    else
+                        direction_y = Math.abs(direction_y) * (-1);
                 }
                 this.$el.offset({ top: this.position.y, left: this.position.x });
             },this), 9);
@@ -187,8 +194,8 @@ define(function(require, exports, module) {
 //            });
             //测试数据
 
-//            var stage = new Stage(20, 20, 800, 800);
-            var stage = Stage.stageWithEl('.stage');
+            var stage = new Stage(0, 0, $(window).width(), $(window).height());
+//            var stage = Stage.stageWithEl('.stage');
 
             for(var i = 0;i<10;i++){
                 var model = new BlazeModel({
@@ -202,6 +209,7 @@ define(function(require, exports, module) {
         },
 
         run: function(){
+            $('html').css({overflow: 'hidden'})
             _.each(this.blazes, function(blaze){
                 $('body').append(blaze.render().el);
                 blaze.dance();
