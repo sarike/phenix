@@ -1,6 +1,5 @@
 from flask.app import Flask
 from flask.templating import render_template
-from werkzeug.utils import redirect
 
 __author__ = 'Sarike'
 

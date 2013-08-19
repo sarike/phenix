@@ -61,8 +61,8 @@ define(function(require, exports, module) {
                 this.position.y += direction_y;
                 this.position.z += direction_z;
                 this.$el.css({
-                            width: this.$el.width()*(1+this.position.z*0.001) + 'px',
-                            height: this.$el.height()*(1+this.position.z*0.001 + 'px')
+                            width: this.$el.width()*(1 - this.position.z*0.0001) + 'px',
+                            height: this.$el.height()*(1 - this.position.z*0.0001) + 'px'
                         }).offset({ top: this.position.y, left: this.position.x });
             },this), 9);
 
