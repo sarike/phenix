@@ -17,9 +17,18 @@ define(function(require, exports, module) {
         className: 'blaze',
         tagName: 'span',
 
+        mouseStatus: {
+            mouseDown: false,
+            current_x: 0,
+            current_y: 0
+        },
+
         events: {
             'mouseover': 'onMouseOver',
-            'mouseleave': 'onMouseLeave'
+            'mouseleave': 'onMouseLeave',
+            'mousedown': 'onMouseDown',
+            'mousemove': 'onMouseMove',
+            'mouseup': 'onMouseUp'
         },
 
         onMouseOver: function(){
@@ -27,7 +36,28 @@ define(function(require, exports, module) {
         },
 
         onMouseLeave: function(){
+            this.mouseStatus.mouseDown = false;
             this.dance();
+        },
+
+        onMouseUp: function(){
+            this.mouseStatus.mouseDown = false;
+        },
+
+        onMouseDown: function(e){
+            this.mouseStatus.mouseDown = true;
+            this.mouseStatus.current_x = e.clientX;
+            this.mouseStatus.current_y = e.clientY;
+        },
+
+        onMouseMove: function(e){
+            if(this.mouseStatus.mouseDown){
+                this.position.x += e.clientX - this.mouseStatus.current_x;
+                this.position.y += e.clientY - this.mouseStatus.current_y;
+                this.mouseStatus.current_x = e.clientX;
+                this.mouseStatus.current_y = e.clientY;
+                this.$el.offset({ top: this.position.y, left: this.position.x });
+            }
         },
 
         initialize: function(){
@@ -196,7 +226,7 @@ define(function(require, exports, module) {
             var stage = new Stage(0, 0, $(window).width(), $(window).height());
 //            var stage = Stage.stageWithEl('.stage');
 
-            for(var i = 0;i<30;i++){
+            for(var i = 0;i<10;i++){
                 var model = new BlazeModel({
                     position: stage.randomPosition(250, 190)
                 });
