@@ -74,13 +74,14 @@ define(function(require, exports, module) {
         dance: function(){
             var cur_x = this.position.x,
                 cur_y = this.position.y,
+                move_due = Util.random(3, 5) * 1000,
                 random_pos = this.stage.randomPosition(this.$el.width(), this.$el.height()),
                 delta_x = random_pos.x - cur_x,
                 delta_y = random_pos.y - cur_y,
                 direction_x = delta_x/Math.abs(delta_x) * Math.random(),
                 direction_y = delta_y/Math.abs(delta_y) * Math.random();
-                this.move(direction_x, direction_y, 3000);
-                this.danceTimeer = setTimeout($.proxy(this.dance, this), 3000);
+                this.move(direction_x, direction_y, move_due);
+                this.danceTimeer = setTimeout($.proxy(this.dance, this), move_due);
         },
 
         stopDance: function(){
@@ -134,8 +135,6 @@ define(function(require, exports, module) {
         this.x2 = x2;
         this.y1 = y1;
         this.y2 = y2;
-        this.z1 = x1;
-        this.z2 = x2;
     };
 
     Stage.stageWithEl = function(selector){
@@ -197,9 +196,9 @@ define(function(require, exports, module) {
             var stage = new Stage(0, 0, $(window).width(), $(window).height());
 //            var stage = Stage.stageWithEl('.stage');
 
-            for(var i = 0;i<10;i++){
+            for(var i = 0;i<30;i++){
                 var model = new BlazeModel({
-                    position: stage.randomPosition(150, 20)
+                    position: stage.randomPosition(250, 190)
                 });
                 model.title = '第 ' + i + ' 炮火焰';
                 this.blazes.push(new Blaze({
