@@ -1,8 +1,8 @@
 {
   "family": "sarike",
-  "name": "phenix",
+  "name": "base",
   "version": "0.0.1",
-  "description": "a cool js app based on seajs",
+  "description": "base components",
   "homepage": "https://github.com/sarike/phenix",
   "author": "Sarike",
   "repository": {
@@ -13,12 +13,11 @@
   "licenses": "MIT",
   "spm": {
     "source": "src",
-    "output": ["phenix.js"],
+    "output": ["base.js"],
     "alias": {
         "$": "jquery/jquery/1.10.1/jquery",
         "Backbone": "gallery/backbone/1.0.0/backbone",
-        "underscore": "gallery/underscore/1.4.4/underscore",
-        "base": "sarike/base/0.0.1/base"
+        "underscore": "gallery/underscore/1.4.4/underscore"
     }
   }
 }

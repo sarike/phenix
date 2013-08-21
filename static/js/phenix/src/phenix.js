@@ -2,6 +2,8 @@ define(function(require, exports, module) {
 	var $ = require('$');
 	var _ = require('underscore');
 	var B = require('Backbone');
+//  var Base = require('../../base/src/base');
+    var Base = require('sarike/base/0.0.1/base');
 
 	var blazeTemplate = require('./templates/blaze.tpl');
 
@@ -12,23 +14,16 @@ define(function(require, exports, module) {
         }
     });
 
-	var Blaze = B.View.extend({
+	var Blaze = Base.DragableView.extend({
 		template: _.template(blazeTemplate),
         className: 'blaze',
         tagName: 'span',
 
-        mouseStatus: {
-            mouseDown: false,
-            current_x: 0,
-            current_y: 0
-        },
-
-        events: {
-            'mouseover': 'onMouseOver',
-            'mouseleave': 'onMouseLeave',
-            'mousedown': 'onMouseDown',
-            'mousemove': 'onMouseMove',
-            'mouseup': 'onMouseUp'
+        events: function(){
+            return _.extend({},Base.DragableView.prototype.events,{
+                'mouseover': 'onMouseOver',
+                'mouseleave': 'onMouseLeave'
+            });
         },
 
         onMouseOver: function(){
@@ -38,26 +33,6 @@ define(function(require, exports, module) {
         onMouseLeave: function(){
             this.mouseStatus.mouseDown = false;
             this.dance();
-        },
-
-        onMouseUp: function(){
-            this.mouseStatus.mouseDown = false;
-        },
-
-        onMouseDown: function(e){
-            this.mouseStatus.mouseDown = true;
-            this.mouseStatus.current_x = e.clientX;
-            this.mouseStatus.current_y = e.clientY;
-        },
-
-        onMouseMove: function(e){
-            if(this.mouseStatus.mouseDown){
-                this.position.x += e.clientX - this.mouseStatus.current_x;
-                this.position.y += e.clientY - this.mouseStatus.current_y;
-                this.mouseStatus.current_x = e.clientX;
-                this.mouseStatus.current_y = e.clientY;
-                this.$el.offset({ top: this.position.y, left: this.position.x });
-            }
         },
 
         initialize: function(){
