@@ -1,5 +1,6 @@
 body{
-    background-image: url("http://b.zol-img.com.cn/desk/bizhi/image/1/1280x800/1355974390956.jpg");
+    /*background-image: url("http://image.xinli001.com/20130816/000018cb189cccf139fee3.jpg");*/
+    background-image: url("../image/bg/01.jpg");
     position: fixed;
     -webkit-background-size: cover;
     -moz-background-size: cover;
@@ -18,6 +19,12 @@ body{
 .blaze-image{
     width: 160px;
     height: 220px;
+}
+.blaze-content img{
+    position:relative;
+    margin-top: 10px;
+    width: 140px;
+    height: 200px;
 }
 .stage{
     width: 800px;
