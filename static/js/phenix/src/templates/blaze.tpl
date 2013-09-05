@@ -1,6 +1,6 @@
 <div class="blaze-image">
     <div class="blaze-content">
-        <img src="static/image/1.png" alt="a">
+        <div class="img"></div>
     </div>
     <div class="hide description">
 
