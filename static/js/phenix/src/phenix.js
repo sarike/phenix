@@ -28,9 +28,11 @@ define(function(require, exports, module) {
 
         onMouseOver: function(){
             this.stopDance();
+            this.$el.css({'z-index': 100});
         },
 
         onMouseLeave: function(){
+            this.$el.css({'z-index': this.options.z_index});
             this.mouseStatus.mouseDown = false;
             this.dance();
         },
@@ -38,11 +40,17 @@ define(function(require, exports, module) {
         initialize: function(){
             this.position = this.model.get('position');
             this.stage = this.position.stage;
-            this.$el.css({ top: this.position.y, left: this.position.x, position: 'relative' });
+            this.$el.css({
+                top: this.position.y,
+                left: this.position.x,
+                position: 'relative',
+                'z-index': this.options.z_index
+            });
         },
 
 		render: function(){
 			this.$el.html(this.template(this.model));
+            this.$("div.img").css("background-image", "url('../static/image/"+ this.options.content + "')")
             return this;
 		},
         /**
@@ -108,6 +116,12 @@ define(function(require, exports, module) {
             return Math.random() * (max - min) + min;
         }
     };
+
+    var BlazeType = {
+        IMAGE: 0,
+        TEXT: 1,
+        VEDIO: 2
+    }
 
     /**
      * Define Position Class
@@ -201,13 +215,16 @@ define(function(require, exports, module) {
             var stage = new Stage(0, 0, $(window).width(), $(window).height());
 //            var stage = Stage.stageWithEl('.stage');
 
-            for(var i = 0;i<10;i++){
+            for(var i = 1;i<=6;i++){
                 var model = new BlazeModel({
                     position: stage.randomPosition(250, 190)
                 });
                 model.title = '第 ' + i + ' 炮火焰';
                 this.blazes.push(new Blaze({
-                    model: model
+                    model: model,
+                    z_index: i,
+                    type: BlazeType.IMAGE,
+                    content: i + '.png'
                 }))
             }
         },
